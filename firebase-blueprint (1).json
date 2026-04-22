@@ -1,0 +1,95 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and account balance",
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string" },
+        "password": { "type": "string", "description": "Hashed password for custom auth" },
+        "balance": { "type": "number" },
+        "referralCode": { "type": "string" },
+        "referredBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "role": { "type": "string", "enum": ["user", "admin"] }
+      },
+      "required": ["phone", "password", "balance", "referralCode", "createdAt", "role"]
+    },
+    "Investment": {
+      "title": "Investment",
+      "description": "Active or completed investment records",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "planId": { "type": "string" },
+        "planName": { "type": "string" },
+        "roi": { "type": "number" },
+        "profit": { "type": "number" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "completed"] }
+      },
+      "required": ["userId", "amount", "planId", "roi", "profit", "startTime", "endTime", "status"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Record of deposits, withdrawals, and profits",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["deposit", "withdraw", "profit", "referral"] },
+        "amount": { "type": "number" },
+        "time": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] }
+      },
+      "required": ["userId", "type", "amount", "time", "status"]
+    },
+    "Plan": {
+      "title": "Plan",
+      "description": "Investment plans configurable by admin",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "durationLabel": { "type": "string" },
+        "durationMs": { "type": "number" },
+        "roi": { "type": "number" },
+        "minAmount": { "type": "number" },
+        "maxAmount": { "type": "number" },
+        "riskLevel": { "type": "string", "enum": ["low", "medium", "high"] }
+      },
+      "required": ["name", "durationLabel", "durationMs", "roi", "minAmount", "maxAmount", "riskLevel"]
+    },
+    "SystemConfig": {
+      "title": "System Configuration",
+      "description": "Global system settings like deposit numbers",
+      "type": "object",
+      "properties": {
+        "depositNumber": { "type": "string" }
+      },
+      "required": ["depositNumber"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "investments/{investmentId}": {
+      "schema": "Investment",
+      "description": "Investment records"
+    },
+    "transactions/{txId}": {
+      "schema": "Transaction",
+      "description": "Transaction history"
+    },
+    "plans/{planId}": {
+      "schema": "Plan",
+      "description": "Investment plans"
+    },
+    "system/config": {
+      "schema": "SystemConfig",
+      "description": "Global system configuration"
+    }
+  }
+}
