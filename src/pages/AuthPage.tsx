@@ -60,7 +60,6 @@ export const AuthPage: React.FC<{ onBack: () => void; isAdminMode?: boolean }> =
         <ArrowLeft className="w-5 h-5 mr-1" /> Back
       </button>
 
-      {/* Background Blobs for Admin Mode */}
       {isAdminMode && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent-purple/20 rounded-full blur-[120px] animate-pulse" />
@@ -81,13 +80,10 @@ export const AuthPage: React.FC<{ onBack: () => void; isAdminMode?: boolean }> =
               exit={{ opacity: 0, scale: 0.95 }}
               className="space-y-8"
             >
-              <div className="text-center mb-8 select-none">
-                <div 
-                  onClick={handleLogoClick}
-                  className="w-16 h-16 bg-gradient-to-br from-accent-purple to-black rounded-2xl mx-auto mb-6 shadow-[0_0_30px_rgba(157,80,187,0.4)] border border-accent-purple/50 cursor-pointer active:scale-95 transition-all"
-                />
-                <h2 className="text-3xl font-bold mb-2 tracking-tight text-accent-purple italic uppercase">Admin Protocol</h2>
-                <p className="text-white/40 text-xs font-bold leading-relaxed">Identity verification required. Enter admin authorized number.</p>
+              <div className="text-center mb-8">
+                <div onClick={handleLogoClick} className="w-16 h-16 bg-gradient-to-br from-accent-purple to-black rounded-2xl mx-auto mb-6 shadow-[0_0_30px_rgba(157,80,187,0.4)] border border-accent-purple/50 cursor-pointer active:scale-95 transition-all" />
+                <h2 className="text-3xl font-bold mb-2 text-accent-purple italic uppercase">Admin Protocol</h2>
+                <p className="text-white/40 text-xs font-bold">Identity verification required.</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -95,30 +91,55 @@ export const AuthPage: React.FC<{ onBack: () => void; isAdminMode?: boolean }> =
                   <label className="text-[10px] uppercase font-bold tracking-[2px] text-accent-purple/60 ml-1">Admin Identity</label>
                   <div className="relative">
                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-accent-purple" />
-                    <input
-                      type="tel"
-                      required
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="01XXXXXXXXX"
-                      className="glass-input w-full pl-12 border-accent-purple/20 focus:border-accent-purple/50 focus:ring-accent-purple/10"
-                    />
+                    <input type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01XXXXXXXXX" className="glass-input w-full pl-12 border-accent-purple/20" />
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-accent-purple to-purple-600 text-white rounded-xl font-bold shadow-lg shadow-purple-500/20 active:scale-95 transition-all"
-                >
+                <button type="submit" disabled={loading} className="w-full py-4 bg-gradient-to-r from-accent-purple to-purple-600 text-white rounded-xl font-bold">
                   {loading ? "Verifying..." : "Initialize Admin Access"}
                 </button>
               </form>
             </motion.div>
           ) : (
-            /* এখানে যদি আপনার আরও কোনো কোড থাকে (যেমন সাধারণ ইউজার লগইন ফর্ম), 
-               তবে সেটি বসাতে হবে। নিচে আমি একটি সাধারণ স্ট্রাকচার দিয়ে ক্লোজ করে দিলাম। */
-            <motion.div key="user-form">
-               {/* User form contents would go here */}
+            <motion.div
+              key="user-form"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-8"
+            >
+              <div className="text-center mb-8">
+                <div onClick={handleLogoClick} className="w-16 h-16 bg-white/10 rounded-2xl mx-auto mb-6 cursor-pointer" />
+                <h2 className="text-3xl font-bold text-white mb-2">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+                <p className="text-white/60">{isLogin ? 'Login to your account' : 'Join our community today'}</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                  <input type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone Number" className="glass-input w-full pl-12" />
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                  <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="glass-input w-full pl-12" />
+                </div>
+                {!isLogin && (
+                  <div className="relative">
+                    <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                    <input type="text" value={referralCode} onChange={(e) => setReferralCode(e.target.value)} placeholder="Referral Code (Optional)" className="glass-input w-full pl-12" />
+                  </div>
+                )}
+                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                <button type="submit" disabled={loading} className="w-full py-4 bg-white text-black rounded-xl font-bold hover:bg-white/90 transition-all">
+                  {loading ? 'Processing...' : (isLogin ? 'Login' : 'Register')}
+                </button>
+              </form>
+
+              <p className="text-center text-white/60 text-sm">
+                {isLogin ? "Don't have an account? " : "Already have an account? "}
+                <button onClick={() => setIsLogin(!isLogin)} className="text-white font-bold hover:underline">
+                  {isLogin ? 'Sign Up' : 'Login'}
+                </button>
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
