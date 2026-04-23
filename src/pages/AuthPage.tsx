@@ -104,3 +104,25 @@ export const AuthPage: React.FC<{ onBack: () => void; isAdminMode?: boolean }> =
                       className="glass-input w-full pl-12 border-accent-purple/20 focus:border-accent-purple/50 focus:ring-accent-purple/10"
                     />
                   </div>
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-4 bg-gradient-to-r from-accent-purple to-purple-600 text-white rounded-xl font-bold shadow-lg shadow-purple-500/20 active:scale-95 transition-all"
+                >
+                  {loading ? "Verifying..." : "Initialize Admin Access"}
+                </button>
+              </form>
+            </motion.div>
+          ) : (
+            /* এখানে যদি আপনার আরও কোনো কোড থাকে (যেমন সাধারণ ইউজার লগইন ফর্ম), 
+               তবে সেটি বসাতে হবে। নিচে আমি একটি সাধারণ স্ট্রাকচার দিয়ে ক্লোজ করে দিলাম। */
+            <motion.div key="user-form">
+               {/* User form contents would go here */}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </GlassCard>
+    </div>
+  );
+};
